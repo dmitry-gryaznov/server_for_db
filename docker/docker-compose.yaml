@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zadanie4
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    env_file:
+      - ../.env
+
+  server-fill-db:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: server-fill-db
+    volumes:
+      - ../src:/app/src
+      - ../server_data:/app/output
+      - ../models:/app/models
+    depends_on:
+      - postgres
+    command: ["python", "/app/src/main.py"]
+    env_file:
+      - ../.env
+
+volumes:
+  postgres_data:
+  server_fill_db_data:
