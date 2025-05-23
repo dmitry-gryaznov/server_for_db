@@ -4,6 +4,9 @@ from models import Клиент, Услуга, Платеж, Потреблен�
 from sqlalchemy import text
 
 def fill_initial_data(session: Session):
+    users = session.query(Клиент).all()
+    if len(users):
+        return
     try:
         services_data = [
             {"код_услуги": 1, "наименование": "Электроснабжение", "единица_измерения": "кВт·ч"},
